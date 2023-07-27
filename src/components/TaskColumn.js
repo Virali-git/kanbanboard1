@@ -9,6 +9,8 @@ import styled from "@emotion/styled";
 import { addTask, moveTask } from "../taskSlice";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+import { TextField } from "@mui/material";
+import { format } from "date-fns"; // Import the format function from date-fns
 
 const Task = styled(Paper)({
   marginBottom: "8px",
@@ -25,21 +27,23 @@ const Column = styled(Grid)({
   marginRight: "16px",
 });
 
+const formatDate = (date) => {
+  return format(date, "EEE MMM dd yyyy HH:mm:ss");
+};
+
 const TaskColumn = ({ onDropevent, ColumnTitle, tasks, columnState }) => {
   const dispatch = useDispatch();
   const handleDragStart = (event, id) => {
-    console.log("@@dragStart",event, id);
+    console.log("@@dragStart", event, id);
     event.dataTransfer.setData("taskId", id);
   };
   const handleDragOver = (event) => {
     event.preventDefault();
   };
   const handleDrop = (event, newState) => {
-    
-  
     const taskId = event.dataTransfer.getData("taskId");
-    console.log("@@drop",event, newState, taskId);
-    dispatch(moveTask({ id:taskId, newState }));
+    console.log("@@drop", event, newState, taskId);
+    dispatch(moveTask({ id: taskId, newState }));
   };
   return (
     <Column
@@ -56,8 +60,36 @@ const TaskColumn = ({ onDropevent, ColumnTitle, tasks, columnState }) => {
             draggable
             onDragStart={(event) => handleDragStart(event, task.id)}
           >
-            {task.name}
-            {task.priority}
+            {console.log("@@TSK", task)}
+            {task.name && (
+              <TextField
+                label=""
+                value={task.name}
+                fullWidth
+                disabled
+                sx={{ padding: "10px", marginTop: "10px" }}
+              />
+            )}
+            {task.priority && (
+              <TextField
+                label=""
+                value={task.priority}
+                fullWidth
+                disabled
+                sx={{ padding: "10px", marginTop: "10px" }}
+              />
+            )}
+
+            {task.deadline && (
+              <TextField
+                label=""
+                value={formatDate(task.deadline)}
+                variant="outlined"
+                fullWidth
+                disabled
+                sx={{ padding: "10px", marginTop: "10px" }}
+              />
+            )}
           </Task>
         ))}
     </Column>

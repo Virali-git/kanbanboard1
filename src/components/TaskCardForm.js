@@ -75,7 +75,7 @@ const TaskCardForm = ({taskData, setTaskData}) => {
             name: taskData.taskName,
             state: "backlog",
             priority: taskData.priority,
-            deadline: taskData.dueDate,
+            deadline: taskData.dueDate
           };
           dispatch(addTask(newTask));
           setTaskData({
